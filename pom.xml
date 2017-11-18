@@ -151,7 +151,7 @@
                     <minimumCoverage>80</minimumCoverage>
                     <failOnMinimumCoverage>true</failOnMinimumCoverage>
                     <excludedPackages>
-                        edge.labs.orchestrator.events;edge.labs.orchestrator.util.rest;edge.labs.orchestrator.actor.ops;edge.labs.orchestrator.actor.metrics;edge.labs.orchestrator.Main;edge.labs.orchestrator.Akka
+                        edge.labs.orchestrator.events;edge.labs.orchestrator.util.rest;edge.labs.orchestrator.Main;
                     </excludedPackages>
                 </configuration>
                 <executions>

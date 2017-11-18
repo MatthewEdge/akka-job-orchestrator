@@ -1,8 +1,7 @@
 package edge.labs.orchestrator.actor
 
 import akka.actor.ActorLogging
-import akka.contrib.pattern.ReceivePipeline
-import akka.contrib.pattern.ReceivePipeline.Inner
+import edge.labs.orchestrator.actor.ReceivePipeline.Inner
 import edge.labs.orchestrator.{Command, Event}
 
 /**
@@ -18,13 +17,11 @@ trait LoggingInterceptor extends ActorLogging {
       // Catch and log Events
       case e: Event =>
         log.debug(s"$e event | To: ${this.self.path}")
-
         Inner(e)
 
       // Catch and log Commands
       case c: Command =>
         log.debug(s"$c command | To: ${this.self.path}")
-
         Inner(c)
     }
 
