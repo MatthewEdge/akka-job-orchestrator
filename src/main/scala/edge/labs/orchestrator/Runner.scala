@@ -42,6 +42,8 @@ object Runner {
         10.seconds
       )
 
+    log.info("Running with fetched DAG")
+
     runWith(runDate, dag)
   }
 

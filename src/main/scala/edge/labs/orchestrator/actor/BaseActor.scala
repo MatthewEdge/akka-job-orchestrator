@@ -1,7 +1,6 @@
 package edge.labs.orchestrator.actor
 
 import akka.actor.{Actor, ActorLogging, Scheduler}
-import akka.contrib.pattern.ReceivePipeline
 import akka.dispatch.MessageDispatcher
 import edge.labs.orchestrator.Settings
 

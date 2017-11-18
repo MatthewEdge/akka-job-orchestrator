@@ -99,7 +99,7 @@ trait ReceivePipeline extends Actor {
     private def evaluate(m: Any) = handler(m)
   }
 
-  override protected[akka] def aroundReceive(receive: Receive, msg: Any): Unit = {
+  override def aroundReceive(receive: Receive, msg: Any): Unit = {
     def withCachedDecoration(decorator: Receive ⇒ Receive): Receive = decoratorCache match {
       case Some((`receive`, cached)) ⇒ cached
       case _ ⇒

@@ -106,7 +106,10 @@ object Main extends App with JsonSupport {
   // Note: 0.0.0.0 is REQUIRED to work on EC2 instances
   log.info(s"Starting REST API on port ${settings.port}")
 
-  Http().bindAndHandle(route, "0.0.0.0", settings.port)
+  Http()
+    .bindAndHandle(route, "0.0.0.0", settings.port)
+
+  log.info(s"App started on port ${settings.port}")
 
   /**
    * Abstraction of running a Akka HTTP route asynchronously using the given Future. Converts the response

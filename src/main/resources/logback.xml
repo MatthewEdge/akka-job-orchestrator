@@ -43,9 +43,9 @@
         </sift>
     </appender>
 
-    <logger name="edge.labs.orchestrator" level="INFO" />
+    <logger name="edge.labs.orchestrator" level="DEBUG" />
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" /><!-- For local testing -->
         <appender-ref ref="SIFTER" />
     </root>
