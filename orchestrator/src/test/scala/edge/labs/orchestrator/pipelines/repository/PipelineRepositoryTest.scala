@@ -40,7 +40,7 @@ class PipelineRepositoryTest extends BaseTest with ScalaFutures with TestModels 
   }
 
   "fetchDAG()" should "create a proper DAG from the given test JSON" in {
-    val testJson = testResource("/singleDag")
+    val testJson = testResource("/test/resources/singleDag")
     val dagFuture = testReader.fetchDAG(testJson, testRunDate)
 
     whenReady(dagFuture) { dag =>

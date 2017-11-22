@@ -6,3 +6,5 @@ target
 
 logs/
 appLog.log
+
+.ensime*

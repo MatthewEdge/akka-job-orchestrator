@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property
+            name="LOG_PATTERN"
+            value="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+    />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SIFTER" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>logFile</key>
+            <defaultValue>appLog</defaultValue>
+        </discriminator>
+
+        <sift>
+
+            <!-- File Logging is synchronous by nature. This makes it Async (strongly recommended for Akka) -->
+            <appender name="ASYNC_ROLLING-${logFile}" class="ch.qos.logback.classic.AsyncAppender">
+                <queueSize>1000000</queueSize>
+
+                <appender name="DAILY_ROLL-${logFile}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                    <file>${logFile}.log</file>
+                    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- daily rollover (because dd is the smallest time unit in this pattern) -->
+                        <fileNamePattern>logs/${logFile}/%d{yyyy-MM-dd}.log</fileNamePattern>
+
+                        <!-- keep 30 days' worth of history -->
+                        <!-- Logback will automatically start to delete log files (async) when this cap is reached -->
+                        <maxHistory>15</maxHistory>
+                    </rollingPolicy>
+
+                    <encoder>
+                        <pattern>${LOG_PATTERN}</pattern>
+                    </encoder>
+                </appender>
+            </appender>
+        </sift>
+    </appender>
+
+    <logger name="edge.labs.mock" level="DEBUG" />
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" /><!-- For local testing -->
+        <appender-ref ref="SIFTER" />
+    </root>
+
+</configuration>
