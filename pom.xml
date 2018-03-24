@@ -65,12 +65,6 @@
                 <version>${akka.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.json4s</groupId>
-                <artifactId>json4s-native_${scala.binary.version}</artifactId>
-                <version>3.5.3</version>
-            </dependency>
-
             <!-- Logging -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
