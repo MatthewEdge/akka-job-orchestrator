@@ -4,7 +4,7 @@ import edge.labs.orchestrator.Supervisor.{Completed, Failed}
 import edge.labs.orchestrator.jobs.{JobEvent, JobFailed}
 import edge.labs.orchestrator.pipelines.{PipelineEvent, PipelineFailed}
 
-import edge.labs.orchestrator.util.ordering.Orderings.LocalDateTimeOrdering
+import edge.labs.orchestrator.ordering.Orderings.LocalDateTimeOrdering
 
 /* @author medge */
 

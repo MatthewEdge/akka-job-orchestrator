@@ -1,4 +1,4 @@
-package edge.labs.orchestrator.util.json
+package edge.labs.orchestrator.json
 
 import akka.http.scaladsl.model.StatusCodes
 import edge.labs.orchestrator.{BaseTest, TestModels}

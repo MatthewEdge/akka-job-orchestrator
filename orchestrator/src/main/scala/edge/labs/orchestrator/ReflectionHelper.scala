@@ -1,4 +1,4 @@
-package edge.labs.orchestrator.util
+package edge.labs.orchestrator
 
 import scala.reflect.{ClassTag, classTag}
 

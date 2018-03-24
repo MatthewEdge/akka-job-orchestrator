@@ -5,7 +5,7 @@ import edge.labs.orchestrator.Event
 import edge.labs.orchestrator.Supervisor.{Completed, Failed}
 import edge.labs.orchestrator.actor.BaseActor
 import edge.labs.orchestrator.events.repository.EventRepository
-import edge.labs.orchestrator.util.json.JsonSupport
+import edge.labs.orchestrator.json.JsonSupport
 
 /* @author medge */
 

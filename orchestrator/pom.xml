@@ -13,11 +13,6 @@
     <artifactId>orchestrator</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <akka.version>2.5.6</akka.version>
-        <akka.http.version>10.0.10</akka.http.version>
-    </properties>
-
     <dependencies>
 
         <!-- Scala -->
@@ -36,12 +31,6 @@
             <artifactId>scalaj-http_${scala.binary.version}</artifactId>
         </dependency>
 
-        <!-- JSON parsing -->
-        <dependency>
-            <groupId>org.json4s</groupId>
-            <artifactId>json4s-native_${scala.binary.version}</artifactId>
-        </dependency>
-
         <!-- Logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -52,34 +41,33 @@
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor_${scala.binary.version}</artifactId>
-            <version>${akka.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-contrib_${scala.binary.version}</artifactId>
-            <version>${akka.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http_${scala.binary.version}</artifactId>
-            <version>${akka.http.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-slf4j_${scala.binary.version}</artifactId>
-            <version>${akka.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-testkit_${scala.binary.version}</artifactId>
-            <version>${akka.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http-testkit_${scala.binary.version}</artifactId>
-            <version>${akka.http.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-native_${scala.binary.version}</artifactId>
         </dependency>
     </dependencies>
 
@@ -112,7 +100,6 @@
                 <configuration>
                     <aggregate>false</aggregate>
                     <highlighting>true</highlighting>
-
                     <minimumCoverage>80</minimumCoverage>
                     <failOnMinimumCoverage>true</failOnMinimumCoverage>
                     <excludedPackages>

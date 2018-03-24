@@ -1,6 +1,6 @@
 package edge.labs.orchestrator.jobs.rest
 
-import edge.labs.orchestrator.util.rest.RestClient
+import edge.labs.orchestrator.rest.RestClient
 
 /* @author medge */
 

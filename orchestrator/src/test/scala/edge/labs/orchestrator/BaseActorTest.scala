@@ -3,7 +3,6 @@ package edge.labs.orchestrator
 import akka.actor.{Actor, ActorSystem, Props, UnhandledMessage}
 import akka.testkit.{DefaultTimeout, ImplicitSender, TestActorRef, TestKitBase, TestProbe}
 import com.typesafe.config.ConfigFactory
-import edge.labs.orchestrator.util.ReflectionHelper
 
 import scala.concurrent.duration._
 import scala.reflect.ClassTag

@@ -4,7 +4,7 @@ import java.io.File
 
 import edge.labs.orchestrator.dag.DAG
 import edge.labs.orchestrator.pipelines.Pipeline
-import edge.labs.orchestrator.util.json.JsonSupport
+import edge.labs.orchestrator.json.JsonSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 

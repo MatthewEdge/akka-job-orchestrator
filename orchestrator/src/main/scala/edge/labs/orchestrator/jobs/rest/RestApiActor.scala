@@ -8,7 +8,7 @@ import edge.labs.orchestrator.Event
 import edge.labs.orchestrator.actor.BaseActor
 import edge.labs.orchestrator.jobs._
 import edge.labs.orchestrator.jobs.rest.PollingRestActor.PollRequest
-import edge.labs.orchestrator.util.rest.{RestClient, RestMethod}
+import edge.labs.orchestrator.rest.{RestClient, RestMethod}
 
 import scala.concurrent.Future
 

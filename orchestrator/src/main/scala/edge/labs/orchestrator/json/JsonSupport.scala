@@ -1,4 +1,4 @@
-package edge.labs.orchestrator.util.json
+package edge.labs.orchestrator.json
 
 import java.io.File
 

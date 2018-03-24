@@ -11,18 +11,18 @@
 
     <modules>
         <module>orchestrator</module>
-        <module>mock-rest</module>
-        <module>shopping-api</module>
     </modules>
 
     <properties>
-        <scala.version>2.12.3</scala.version>
+        <scala.version>2.12.5</scala.version>
         <scala.binary.version>2.12</scala.binary.version>
+
+        <akka.version>2.5.11</akka.version>
+        <akka.http.version>10.1.0</akka.http.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-
             <!-- Scala -->
             <dependency>
                 <groupId>org.scala-lang</groupId>
@@ -32,34 +32,39 @@
             <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_${scala.binary.version}</artifactId>
-                <version>3.0.4</version>
+                <version>3.0.5</version>
                 <scope>test</scope>
             </dependency>
 
+            <!-- HTTP Client -->
             <dependency>
                 <groupId>org.scalaj</groupId>
                 <artifactId>scalaj-http_${scala.binary.version}</artifactId>
                 <version>2.3.0</version>
             </dependency>
 
-            <!-- REST APIs -->
+            <!-- Akka -->
             <dependency>
-                <groupId>com.github.finagle</groupId>
-                <artifactId>finch-core_${scala.binary.version}</artifactId>
-                <version>0.16.0-M5</version>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-actor_${scala.binary.version}</artifactId>
+                <version>${akka.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.finagle</groupId>
-                <artifactId>finch-circe_${scala.binary.version}</artifactId>
-                <version>0.16.0-M5</version>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-contrib_${scala.binary.version}</artifactId>
+                <version>${akka.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.circe</groupId>
-                <artifactId>circe-generic_${scala.binary.version}</artifactId>
-                <version>0.9.0-M2</version>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-slf4j_${scala.binary.version}</artifactId>
+                <version>${akka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-testkit_${scala.binary.version}</artifactId>
+                <version>${akka.version}</version>
             </dependency>
 
-            <!-- JSON parsing -->
             <dependency>
                 <groupId>org.json4s</groupId>
                 <artifactId>json4s-native_${scala.binary.version}</artifactId>
@@ -71,6 +76,33 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.2.3</version>
+            </dependency>
+
+            <!-- Akka HTTP APIs -->
+            <dependency>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-http_${scala.binary.version}</artifactId>
+                <version>${akka.http.version}</version>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>com.typesafe.akka</groupId>-->
+                <!--<artifactId>akka-http-spray-json_${scala.binary.version}</artifactId>-->
+                <!--<version>${akka.http.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>org.json4s</groupId>
+                <artifactId>json4s-native_${scala.binary.version}</artifactId>
+                <version>3.5.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-stream_${scala.binary.version}</artifactId>
+                <version>${akka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-http-testkit_${scala.binary.version}</artifactId>
+                <version>${akka.http.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

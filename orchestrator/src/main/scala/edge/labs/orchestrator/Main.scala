@@ -9,7 +9,7 @@ import akka.pattern.ask
 import edge.labs.orchestrator.events.EventReader.{FetchEvents, ReceiveEvents}
 import edge.labs.orchestrator.events.repository.PersistentInMemEventRepository
 import edge.labs.orchestrator.events.{EventReader, LogFileEventWriter}
-import edge.labs.orchestrator.util.json.JsonSupport
+import edge.labs.orchestrator.json.JsonSupport
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}

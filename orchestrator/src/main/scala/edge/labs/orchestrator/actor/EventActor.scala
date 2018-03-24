@@ -2,7 +2,7 @@ package edge.labs.orchestrator.actor
 
 import akka.actor.Actor
 import akka.event.EventStream
-import edge.labs.orchestrator.util.ReflectionHelper
+import edge.labs.orchestrator.ReflectionHelper
 
 import scala.reflect.ClassTag
 

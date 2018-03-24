@@ -1,4 +1,4 @@
-package edge.labs.orchestrator.util.ordering
+package edge.labs.orchestrator.ordering
 
 import java.time.LocalDateTime
 

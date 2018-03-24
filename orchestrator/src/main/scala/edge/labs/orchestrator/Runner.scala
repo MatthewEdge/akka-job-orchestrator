@@ -11,7 +11,7 @@ import edge.labs.orchestrator.jobs.Job
 import edge.labs.orchestrator.jobs.rest.RestApiActor
 import edge.labs.orchestrator.pipelines.repository.PipelineRepository
 import edge.labs.orchestrator.pipelines.{Pipeline, PipelineSupervisor}
-import edge.labs.orchestrator.util.rest.ScalajRestClient
+import edge.labs.orchestrator.rest.ScalajRestClient
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
