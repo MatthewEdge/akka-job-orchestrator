@@ -10,9 +10,10 @@ import org.json4s.{DefaultFormats, _}
 import scala.io.Source
 
 /* @author medge */
+
 trait JsonSupport {
 
-  implicit val formats = DefaultFormats
+  implicit val formats: Formats = DefaultFormats
 
   /**
    * @param file File
@@ -60,7 +61,7 @@ trait JsonSupport {
    * @return String JSON
    */
   def toJson[T <: AnyRef](model: T)(implicit mf: scala.reflect.Manifest[T]): String = {
-    implicit val formats = Serialization.formats(NoTypeHints)
+    implicit val formats: Formats = Serialization.formats(NoTypeHints)
 
     Serialization.write[T](model)
   }

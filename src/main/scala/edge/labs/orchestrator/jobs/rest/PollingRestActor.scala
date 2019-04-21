@@ -97,7 +97,7 @@ class PollingRestActor(parent: ActorRef, job: Job, restClient: RestClient) exten
   var timeout: Cancellable = _
   implicit val schedulerEC: ExecutionContext = context.dispatcher
 
-  override def receive = {
+  override def receive: Receive = {
 
     // Initial request
     case poll: PollRequest =>
@@ -231,7 +231,7 @@ class PollingRestActor(parent: ActorRef, job: Job, restClient: RestClient) exten
   private def shutdown(): Unit = {
     timeout.cancel()
 
-    stop()
+    context.stop(self)
   }
 
 }

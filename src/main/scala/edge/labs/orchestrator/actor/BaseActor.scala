@@ -2,7 +2,7 @@ package edge.labs.orchestrator.actor
 
 import akka.actor.{Actor, ActorLogging, Scheduler}
 import akka.dispatch.MessageDispatcher
-import edge.labs.orchestrator.Settings
+import edge.labs.orchestrator.{Akka, Settings}
 
 /**
  * Canonical Actor definition. Also provides some useful
@@ -26,9 +26,6 @@ trait BaseActor extends Actor with ActorLogging
   val taskScheduler: Scheduler = context.system.scheduler
 
   // Fetch desired Dispatcher
-  def getDispatcher(key: String): MessageDispatcher = context.system.dispatchers.lookup(key)
-
-  // Stop the current actor and free it's resources
-  def stop(): Unit = context.stop(self)
+  def getDispatcher(key: String): MessageDispatcher = Akka.getDispatcher(key)
 
 }

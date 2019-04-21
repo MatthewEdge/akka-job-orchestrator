@@ -10,11 +10,11 @@ import scala.concurrent.duration._
  * Container object for the ActorSystem and other Akka-related objects
  */
 object Akka {
-  implicit val system = ActorSystem("orchestrator")
-  implicit val materializer = ActorMaterializer()
+  implicit val system: ActorSystem = ActorSystem("orchestrator")
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
   
   // For Future invocation
-  implicit val timeout = Timeout(10.seconds)
+  implicit val timeout: Timeout = Timeout(10.seconds)
 
   /**
    * Create a Root-level named Actor

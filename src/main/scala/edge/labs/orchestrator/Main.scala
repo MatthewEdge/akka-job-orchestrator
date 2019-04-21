@@ -117,8 +117,11 @@ object Main extends App with JsonSupport {
    */
   def runAsync[T <: AnyRef](runDate: String)(future: ⇒ Future[T])(implicit mfT: Manifest[T]): Route = {
     onComplete(future) {
-      case Success(resp) => complete(jsonResponse(resp))
-      case Failure(ex) => complete(jsonResponse(Status(runDate, "Request failed to execute")))
+      case Success(resp) =>
+        complete(jsonResponse(resp))
+      case Failure(ex) =>
+        ex.printStackTrace() // TODO cleaner logging needed
+        complete(jsonResponse(Status(runDate, "Request failed to execute")))
     }
   }
 

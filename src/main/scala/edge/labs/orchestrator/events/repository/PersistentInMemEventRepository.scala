@@ -19,7 +19,7 @@ case class PersistentInMemEventRepository(
   val log = Logger("PersistentInMemEventRepository")
 
   val settings = Settings()
-  val daysToKeep = settings.daysToKeep
+  val daysToKeep: Int = settings.daysToKeep
 
   private[this] var events: Map[String, Set[Event]] = Map.empty
 

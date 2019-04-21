@@ -63,7 +63,7 @@ object ScalajRestClient extends RestClient {
    * @param url String URL to query
    * @return Http
    */
-  private def baseClient(url: String) = {
+  private def baseClient(url: String): HttpRequest = {
     Http(url)
       .timeout(
         connTimeoutMs = 10.seconds.toMillis.toInt,

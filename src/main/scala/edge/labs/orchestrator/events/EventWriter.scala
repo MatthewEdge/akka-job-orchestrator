@@ -48,16 +48,16 @@ abstract class EventWriter(eventRepository: EventRepository) extends BaseActor {
     eventRepository.persistEvents(evt.runDate)
   }
 
-  override def preStart() = {
+  override def preStart(): Unit = {
     subscribeTo[Event]
   }
 
-  final def receive = {
+  final def receive: Receive = {
     case e: Event => e match {
 
       // Run Completed
       case completedEvt if e.isInstanceOf[Completed] || e.isInstanceOf[Failed] =>
-        logRunCompleted(e)
+        logRunCompleted(completedEvt)
 
       // All other events are MDC logged
       case evt @ _ =>

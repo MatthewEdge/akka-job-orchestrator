@@ -6,14 +6,12 @@ import java.time.LocalDateTime
 
 /**
  * Scala Sorting orderings that cover types not covered in Scala by default
- *
- * Note - orderings are ASCENDING by default to follow the Scala convention
  */
 object Orderings {
 
-  /**
-   * LocalDateTime ASCENDING ordering
-   */
-  implicit def LocalDateTimeOrdering: Ordering[LocalDateTime] = Ordering.fromLessThan(_ isBefore _)
+  // LocalDateTime ASCENDING ordering
+  implicit def LocalDateTimeAsc: Ordering[LocalDateTime] = Ordering.fromLessThan(_ isBefore _)
 
+  // LocalDateTime DESCENDING ordering
+  implicit def LocalDateTimeDesc: Ordering[LocalDateTime] = Ordering.fromLessThan(_ isAfter _)
 }

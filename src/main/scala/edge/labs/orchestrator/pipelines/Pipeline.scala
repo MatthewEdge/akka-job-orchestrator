@@ -65,7 +65,7 @@ case class Pipeline(
     this.copy(jobs = jobsWithoutBaseUrl ++ jobsWithBaseUrl)
   }
 
-  override def toString = {
+  override def toString: String = {
     s"Pipeline($runDate, $id, $version, dependencies=[${dependencies.mkString(", ")}], $baseUrl, jobs=[${jobs.map(_.toString).mkString(", ")}])"
   }
 }

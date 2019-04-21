@@ -6,6 +6,8 @@ import edge.labs.orchestrator.actor.BaseActor
 import edge.labs.orchestrator.events.repository.EventRepository
 import edge.labs.orchestrator.{Command, Event}
 
+import scala.concurrent.ExecutionContext
+
 /* @author medge */
 
 object EventReader {
@@ -46,7 +48,7 @@ class EventReader(eventRepository: EventRepository) extends BaseActor {
   import EventReader._
 
   // Dispatcher for Future execution
-  implicit val eventDispatcher = getDispatcher(settings.eventActorDispatcher)
+  implicit val eventDispatcher: ExecutionContext = getDispatcher(settings.eventActorDispatcher)
 
   def receive: Receive = {
     case FetchEvents(runDate) =>

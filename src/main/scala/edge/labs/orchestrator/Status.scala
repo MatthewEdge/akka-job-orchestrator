@@ -4,7 +4,7 @@ import edge.labs.orchestrator.Supervisor.{Completed, Failed}
 import edge.labs.orchestrator.jobs.{JobEvent, JobFailed}
 import edge.labs.orchestrator.pipelines.{PipelineEvent, PipelineFailed}
 
-import edge.labs.orchestrator.ordering.Orderings.LocalDateTimeOrdering
+import edge.labs.orchestrator.ordering.Orderings.LocalDateTimeDesc
 
 /* @author medge */
 
@@ -20,7 +20,7 @@ case class Status(
 
 object Status {
 
-  def apply(runDate: String, status: String) = {
+  def apply(runDate: String, status: String): Status = {
     new Status(runDate, status, Array.empty, Array.empty)
   }
 
@@ -51,13 +51,13 @@ object Status {
 
     val jobEvents =
       events
-        .sortBy(_.eventTs)(LocalDateTimeOrdering).reverse // DESC
+        .sortBy(_.eventTs)(LocalDateTimeDesc)
         .filter(_.isInstanceOf[JobEvent])
         .map(eventToMap)
 
     val pipelineEvents =
       events
-        .sortBy(_.eventTs)(LocalDateTimeOrdering).reverse // DESC
+        .sortBy(_.eventTs)(LocalDateTimeDesc)
         .filter(_.isInstanceOf[PipelineEvent])
         .map(eventToMap)
 

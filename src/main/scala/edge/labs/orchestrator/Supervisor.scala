@@ -15,7 +15,7 @@ object Supervisor {
    * @param dag DAG[Pipeline] to execute
    * @return Props
    */
-  def props(actorCreator: (ActorContext, Pipeline) => ActorRef, dag: DAG[Pipeline], runDate: String) = {
+  def props(actorCreator: (ActorContext, Pipeline) => ActorRef, dag: DAG[Pipeline], runDate: String): Props = {
     Props(
       new Supervisor(actorCreator, dag, runDate)
     )
@@ -72,7 +72,7 @@ class Supervisor(
     actorCreator(context, pipeline)
   }
 
-  def receive = {
+  def receive: Receive = {
 
     // Pipeline DAG retrieved, start executing the DAG returned
     case Start() =>
@@ -118,7 +118,7 @@ class Supervisor(
    *
    * @param lastCompleted Job
    */
-  def next(lastCompleted: Pipeline) = {
+  def next(lastCompleted: Pipeline): Unit = {
 
     // Check both completed AND failed for a full DAG view
     val dagComplete = dag.exitNodes().diff(completed ++ failed).isEmpty
@@ -161,8 +161,7 @@ class Supervisor(
       publish(Completed(runDate))
     }
 
-    stop()
-
+    context.stop(self)
   }
 
   /**
@@ -170,7 +169,7 @@ class Supervisor(
    *
    * @param pipeline Pipeline
    */
-  def markSubmitted(pipeline: Pipeline) = {
+  def markSubmitted(pipeline: Pipeline): Unit = {
     submitted += pipeline
 
     publish(PipelineStarted(pipeline))
@@ -181,7 +180,7 @@ class Supervisor(
    *
    * @param pipeline Pipeline
    */
-  def markCompleted(pipeline: Pipeline) = {
+  def markCompleted(pipeline: Pipeline): Unit = {
     completed += pipeline
 
     publish(PipelineCompleted(pipeline))
@@ -192,7 +191,7 @@ class Supervisor(
    *
    * @param pipeline Pipeline
    */
-  def markFailed(pipeline: Pipeline, reason: String, cause: Throwable = null) = {
+  def markFailed(pipeline: Pipeline, reason: String, cause: Throwable = null): Unit = {
     failed += pipeline
 
     publish(PipelineFailed(pipeline, reason, cause))

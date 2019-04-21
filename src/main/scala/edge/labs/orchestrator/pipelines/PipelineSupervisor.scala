@@ -17,7 +17,7 @@ object PipelineSupervisor {
    * @param actorCreator Function that abstracts how Worker Actors are actually created based on the given Job
    * @return Props
    */
-  def props(parent: ActorRef, pipeline: Pipeline, actorCreator: (ActorContext, Job) => ActorRef) = {
+  def props(parent: ActorRef, pipeline: Pipeline, actorCreator: (ActorContext, Job) => ActorRef): Props = {
     Props(new PipelineSupervisor(parent, pipeline, actorCreator))
   }
 }
@@ -37,13 +37,13 @@ class PipelineSupervisor(
 ) extends BaseActor {
 
   val dag: DAG[Job] = DAG.from[String, Job](pipeline.jobs)
-  val continueOnFailure = pipeline.continueOnFailure
+  val continueOnFailure: Boolean = pipeline.continueOnFailure
 
   var submitted: Set[Job] = Set.empty
   var completed: Set[Job] = Set.empty
   var failed: Set[Job] = Set.empty
 
-  def receive = {
+  def receive: Receive = {
 
     case StartPipeline() =>
       val startJobs = dag.startNodes()
@@ -84,7 +84,7 @@ class PipelineSupervisor(
 
       case Failure(ex) =>
         parent ! PipelineFailed(pipeline, s"Failed to create a Worker Actor for ${job.id}", ex)
-        stop()
+        context.stop(self)
     }
   }
 
@@ -133,7 +133,7 @@ class PipelineSupervisor(
     }
 
     // Free up resources
-    stop()
+    context.stop(self)
   }
 
   /**

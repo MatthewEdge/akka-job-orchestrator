@@ -35,7 +35,7 @@ abstract class Reaper extends BaseActor {
   // Derivations need to implement this method.  It's the hook that's called when everything's dead
   def allSoulsReaped(): Unit
 
-  final def receive = {
+  final def receive: Receive = {
 
     // Watch the given Actor and wait for termination
     case Watch(ref) =>

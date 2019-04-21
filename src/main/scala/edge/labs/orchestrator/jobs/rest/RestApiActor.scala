@@ -78,7 +78,7 @@ class RestApiActor(parent: ActorRef, restClient: RestClient) extends BaseActor {
         val errMsg = s"Could not start [$job] for the following reasons:\n\n" + errors
         parent ! JobFailed(job, errMsg)
 
-        stop()
+        context.stop(self)
       }
       // Job can be processed
       else {
@@ -200,6 +200,6 @@ class RestApiActor(parent: ActorRef, restClient: RestClient) extends BaseActor {
    */
   def finishWith(evt: Event): Unit = {
     parent ! evt
-    stop()
+    context.stop(self)
   }
 }
