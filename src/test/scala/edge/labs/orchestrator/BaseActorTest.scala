@@ -77,7 +77,7 @@ trait BaseActorTest extends BaseTest
    * @tparam T Message type
    * @return T
    */
-  def expectEventStreamMessage[T : ClassTag](obj: T) = eventStreamProbe.fishForMessage(3.seconds, classNameOf[T]) {
+  def expectEventStreamMessage[T : ClassTag](obj: T) = eventStreamProbe.fishForMessage(3.seconds, runtimeClassOf[T].getName) {
     case expected: T => true
     case _ => false
   }

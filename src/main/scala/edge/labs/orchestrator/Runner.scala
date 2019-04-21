@@ -35,7 +35,7 @@ object Runner {
    * @param runDate String runDate attach to the run
    * @return Future[String]
    */
-  def run(runDate: String)(implicit ec: ExecutionContext) = Future[Status] {
+  def run(runDate: String)(implicit ec: ExecutionContext): Future[Status] = Future[Status] {
     val dag =
       Await.result(
         fetchPipelineDagFrom(settings.pipelineDefaultFolder, runDate),

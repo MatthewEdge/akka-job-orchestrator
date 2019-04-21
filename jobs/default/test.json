@@ -17,7 +17,6 @@
         "foo": "bar"
       }
     },
-
     {
       "id": "pipelineA-jobB",
       "description": "Polling REST Test",
