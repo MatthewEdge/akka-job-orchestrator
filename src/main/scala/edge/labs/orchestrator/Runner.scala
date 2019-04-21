@@ -13,8 +13,7 @@ import edge.labs.orchestrator.pipelines.repository.PipelineRepository
 import edge.labs.orchestrator.pipelines.{Pipeline, PipelineSupervisor}
 import edge.labs.orchestrator.rest.ScalajRestClient
 
-import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * @author medge
@@ -36,14 +35,7 @@ object Runner {
    * @return Future[String]
    */
   def run(runDate: String)(implicit ec: ExecutionContext): Future[Status] = Future[Status] {
-    val dag =
-      Await.result(
-        fetchPipelineDagFrom(settings.pipelineDefaultFolder, runDate),
-        10.seconds
-      )
-
-    log.info("Running with fetched DAG")
-
+    val dag = fetchPipelineDagFrom(settings.pipelineDefaultFolder, runDate)
     runWith(runDate, dag)
   }
 
@@ -54,7 +46,7 @@ object Runner {
    * @param runDate String
    * @return Future[ DAG[Pipeline] ]
    */
-  def fetchPipelineDagFrom(folderName: String, runDate: String)(implicit ec: ExecutionContext): Future[DAG[Pipeline]] = {
+  def fetchPipelineDagFrom(folderName: String, runDate: String): DAG[Pipeline] = {
     val pipelinePath = s"${settings.pipelineJsonBaseUrl}/$folderName"
 
     log.debug(s"Pipeline Path being used: $pipelinePath")

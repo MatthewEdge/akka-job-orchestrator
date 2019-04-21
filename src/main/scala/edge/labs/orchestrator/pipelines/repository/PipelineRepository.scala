@@ -6,8 +6,6 @@ import edge.labs.orchestrator.dag.DAG
 import edge.labs.orchestrator.pipelines.Pipeline
 import edge.labs.orchestrator.json.JsonSupport
 
-import scala.concurrent.{ExecutionContext, Future}
-
 /* @author medge */
 
 /**
@@ -27,7 +25,7 @@ object PipelineRepository extends JsonSupport {
    * @throws DuplicatePipelinesException if multiple Pipeline definitions exist with the same ID
    */
   @throws[DuplicatePipelinesException]
-  def fetchDAG(path: String, newRunDate: String)(implicit ctx: ExecutionContext): Future[DAG[Pipeline]] = Future {
+  def fetchDAG(path: String, newRunDate: String): DAG[Pipeline] = {
     val jsonFiles = new File(path).listFiles().filter(isJsonFile)
 
     val pipelines =
@@ -58,7 +56,7 @@ object PipelineRepository extends JsonSupport {
     val dupes = ids.diff(ids.distinct).toSet
 
     if(dupes.nonEmpty)
-      throw new DuplicatePipelinesException(s"Duplicate Pipelines exist with the same ID! duplicates=[${dupes.mkString(",")}]")
+      throw DuplicatePipelinesException(s"Duplicate Pipelines exist with the same ID! duplicates=[${dupes.mkString(",")}]")
   }
 
 }

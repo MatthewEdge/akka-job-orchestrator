@@ -11,7 +11,7 @@ import edge.labs.orchestrator.events.repository.PersistentInMemEventRepository
 import edge.labs.orchestrator.events.{EventReader, LogFileEventWriter}
 import edge.labs.orchestrator.json.JsonSupport
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 /**
@@ -44,7 +44,7 @@ object Main extends App with JsonSupport {
 
   // Moves any Future{} work to a separate dispatcher so that the default Actor dispatcher is not interferred with
   // see http://doc.akka.io/docs/akka/2.4.8/scala/http/handling-blocking-operations-in-akka-http-routes.html
-  implicit val futureDispatcher = Akka.getDispatcher(settings.blockingIoDispatcher)
+  implicit val futureDispatcher: ExecutionContext = Akka.getDispatcher(settings.blockingIoDispatcher)
 
   val route: Route =
     pathPrefix("orchestrator" / "v1") {
@@ -115,7 +115,7 @@ object Main extends App with JsonSupport {
    * Abstraction of running a Akka HTTP route asynchronously using the given Future. Converts the response
    * to JSON using jsonResponse()
    */
-  def runAsync[T <: AnyRef](runDate: String)(future: ⇒ Future[T])(implicit mfT: Manifest[T]) = {
+  def runAsync[T <: AnyRef](runDate: String)(future: ⇒ Future[T])(implicit mfT: Manifest[T]): Route = {
     onComplete(future) {
       case Success(resp) => complete(jsonResponse(resp))
       case Failure(ex) => complete(jsonResponse(Status(runDate, "Request failed to execute")))
