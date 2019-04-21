@@ -9,16 +9,6 @@ import edge.labs.orchestrator.json.JsonSupport
 
 /* @author medge */
 
-object EventWriter {
-
-  /****************************************************
-   *          Internal Messages
-   ****************************************************/
-  sealed case class EventWriteSuccess(evt: Event)
-  sealed case class EventWriteFailure(evt: Event)
-
-}
-
 /**
  * Base implementation of the EventWriter Actor. Defines three items that implementing classes
  * must provide:
@@ -31,7 +21,8 @@ object EventWriter {
  */
 abstract class EventWriter(eventRepository: EventRepository) extends BaseActor {
 
-  import EventWriter._
+  sealed case class EventWriteSuccess(evt: Event)
+  sealed case class EventWriteFailure(evt: Event)
 
   // Dispatcher for Future execution
   implicit val eventDispatcher = getDispatcher(settings.eventActorDispatcher)

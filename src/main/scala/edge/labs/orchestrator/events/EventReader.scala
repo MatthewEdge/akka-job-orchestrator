@@ -1,6 +1,6 @@
 package edge.labs.orchestrator.events
 
-import akka.actor.{ActorRef, Props}
+import akka.actor.Props
 import akka.pattern.pipe
 import edge.labs.orchestrator.actor.BaseActor
 import edge.labs.orchestrator.events.repository.EventRepository
@@ -16,25 +16,13 @@ object EventReader {
 
   /**
    * Command to fetch all events for the given runDate
-   *
-   * @param runDate String
    */
   case class FetchEvents(runDate: String) extends Command
 
   /**
    * Command containing the requested Events
-   *
-   * @param runDate String
-   * @param events Set[Event]
    */
   case class ReceiveEvents(runDate: String, events: Set[Event]) extends Command
-
-
-  /****************************************************
-   *          Internal Messages
-   ****************************************************/
-  sealed case class RepoFetchSuccess(origSender: ActorRef, runDate: String, events: Set[Event])
-  sealed case class RepoFetchFailed(origSender: ActorRef, runDate: String, reason: Throwable)
 
 }
 
@@ -55,19 +43,16 @@ class EventReader(eventRepository: EventRepository) extends BaseActor {
       val origSender = sender()
 
       eventRepository.findByRunDate(runDate)
-        .map(evts => RepoFetchSuccess(origSender, runDate, evts))
-        .recover {
-          case cause: Throwable => RepoFetchFailed(origSender, runDate, cause)
+        .map { events =>
+          log.debug(s"Returning ${events.size} events back for $runDate")
+          ReceiveEvents(runDate, events)
         }
-        .pipeTo(self)
-
-    case RepoFetchSuccess(origSender, runDate, events) =>
-      log.debug(s"Returning ${events.size} events back for $runDate")
-      origSender ! ReceiveEvents(runDate, events)
-
-    case RepoFetchFailed(origSender, runDate, reason) =>
-      log.error("Failed to fetch events from the EventRepository", reason)
-      origSender ! ReceiveEvents(runDate, Set.empty)
+        .recover {
+          case cause: Throwable =>
+            log.error("Failed to fetch events from the EventRepository", cause)
+            ReceiveEvents(runDate, Set.empty)
+        }
+        .pipeTo(origSender)
 
     case m @ _ =>
       log.warning(s"Unrecognized message sent to EventReader: $m")
