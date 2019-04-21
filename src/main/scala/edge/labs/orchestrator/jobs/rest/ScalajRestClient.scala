@@ -1,7 +1,8 @@
-package edge.labs.orchestrator.rest
+package edge.labs.orchestrator.jobs.rest
+
+import scalaj.http.{Http, HttpRequest}
 
 import scala.concurrent.duration._
-import scalaj.http.{Http, HttpRequest}
 
 /**
  * Simple REST client for performing simple GET/POST using the ScalaJ Http Library

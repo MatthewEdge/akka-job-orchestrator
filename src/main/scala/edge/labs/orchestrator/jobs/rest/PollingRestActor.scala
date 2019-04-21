@@ -5,7 +5,6 @@ import edge.labs.orchestrator.actor.BaseActor
 import edge.labs.orchestrator.jobs.Job
 import edge.labs.orchestrator.jobs.rest.PollingRestActor._
 import edge.labs.orchestrator.json.JsonSupport
-import edge.labs.orchestrator.rest.RestClient
 import edge.labs.orchestrator.{Command, Event}
 
 import scala.concurrent.ExecutionContext

@@ -1,4 +1,4 @@
-package edge.labs.orchestrator.rest
+package edge.labs.orchestrator.jobs.rest
 
 import java.net.SocketTimeoutException
 

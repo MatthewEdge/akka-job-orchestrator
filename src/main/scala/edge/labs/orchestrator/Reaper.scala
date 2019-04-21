@@ -10,8 +10,7 @@ object Reaper {
 }
 
 /**
- * Actor which watches the full system run and handles shutting down the application when
- * completed.
+ * Actor which watches the full system run
  */
 class ProdReaper extends Reaper {
 
@@ -30,7 +29,7 @@ abstract class Reaper extends BaseActor {
   import Reaper._
 
   // Keep track of what we're watching
-  val watched = ArrayBuffer.empty[ActorRef]
+  val watched: ArrayBuffer[ActorRef] = ArrayBuffer.empty[ActorRef]
 
   // Derivations need to implement this method.  It's the hook that's called when everything's dead
   def allSoulsReaped(): Unit

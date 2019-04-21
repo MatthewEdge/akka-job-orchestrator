@@ -1,17 +1,26 @@
 package edge.labs.orchestrator
 
-import akka.actor.Props
+import java.time.LocalDate
+
+import akka.actor.{ActorContext, ActorRef, Props}
 import akka.event.slf4j.Logger
 import akka.http.scaladsl._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
+import edge.labs.orchestrator.Reaper.Watch
+import edge.labs.orchestrator.Supervisor.Start
+import edge.labs.orchestrator.dag.DAG
 import edge.labs.orchestrator.events.EventReader.{FetchEvents, ReceiveEvents}
 import edge.labs.orchestrator.events.repository.PersistentInMemEventRepository
 import edge.labs.orchestrator.events.{EventReader, LogFileEventWriter}
+import edge.labs.orchestrator.jobs.Job
+import edge.labs.orchestrator.jobs.rest.{RestApiActor, ScalajRestClient}
 import edge.labs.orchestrator.json.JsonSupport
+import edge.labs.orchestrator.pipelines.repository.PipelineRepository
+import edge.labs.orchestrator.pipelines.{Pipeline, PipelineSupervisor}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 /**
@@ -32,11 +41,9 @@ object Main extends App with JsonSupport {
   val repo = PersistentInMemEventRepository(
     (key: String, events: Set[Event]) => { /* no-op */ }
   )
+
   val eventReader = system.actorOf(EventReader.props(repo), "EventReader")
   val eventWriter = system.actorOf(Props(new LogFileEventWriter(repo)), "EventWriter")
-
-  // Spin up the Reaper
-  val reaper = system.actorOf(Props(new ProdReaper), "Reaper")
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //                            REST API
@@ -44,20 +51,20 @@ object Main extends App with JsonSupport {
 
   // Moves any Future{} work to a separate dispatcher so that the default Actor dispatcher is not interferred with
   // see http://doc.akka.io/docs/akka/2.4.8/scala/http/handling-blocking-operations-in-akka-http-routes.html
-  implicit val futureDispatcher: ExecutionContext = Akka.getDispatcher(settings.blockingIoDispatcher)
+//  implicit val futureDispatcher = Akka.getDispatcher(settings.blockingIoDispatcher)
 
   val route: Route =
     pathPrefix("orchestrator" / "v1") {
       // GET /orchestrator/v1/run
       // Run Orchestrator with the default Job definitions and a generated runDate
       path("run") {
-        val runDate = Runner.generateRunDate()
+        val runDate = generateRunDate()
 
         log.info(s"Attempting to run Orchestrator with $runDate runDate")
 
         get {
           runAsync(runDate) {
-            Runner.run(runDate)
+            run(runDate)
           }
         }
       } ~
@@ -68,9 +75,7 @@ object Main extends App with JsonSupport {
           log.info(s"Attempting to run Orchestrator with $runDate runDate")
 
           complete {
-            jsonResponse(
-              Runner.run(runDate)
-            )
+            jsonResponse(run(runDate))
           }
         }
       } ~
@@ -123,6 +128,87 @@ object Main extends App with JsonSupport {
         ex.printStackTrace() // TODO cleaner logging needed
         complete(jsonResponse(Status(runDate, "Request failed to execute")))
     }
+  }
+
+  /**
+   * @return String yyyymmdd
+   */
+  def generateRunDate(): String = LocalDate.now().toString.replaceAll("-", "")
+
+  /**
+   * Logic to derive runDate and the DAG[Pipeline]
+   *
+   * @param runDate String runDate attach to the run
+   * @return Future[String]
+   */
+  def run(runDate: String): Future[Status] = Future[Status] {
+    val dag = fetchPipelineDagFrom(settings.pipelineDefaultFolder, runDate)
+    runWith(runDate, dag)
+  }(Akka.getDispatcher(settings.blockingIoDispatcher))
+
+  /**
+   * Fetch a Pipeline DAG from the given folder. The basePath of the folder is pulled from Settings
+   *
+   * @param folderName String
+   * @param runDate String
+   * @return Future[ DAG[Pipeline] ]
+   */
+  def fetchPipelineDagFrom(folderName: String, runDate: String): DAG[Pipeline] = {
+    val pipelinePath = s"${settings.pipelineJsonBaseUrl}/$folderName"
+
+    log.debug(s"Pipeline Path being used: $pipelinePath")
+
+    PipelineRepository.fetchDAG(pipelinePath, runDate)
+  }
+
+  /**
+   * Run with the given runDate/DAG
+   *
+   * @param runDate String
+   * @param dag DAG[Pipeline]
+   * @return Status
+   */
+  def runWith(runDate: String, dag: DAG[Pipeline]): Status = {
+    val instance = createInstanceFor(dag, runDate)
+
+    instance ! Start()
+
+    Status(runDate, "Running")
+  }
+
+  /**
+   * Create an instance to run for the given runDate and execute the given DAG[Pipeline]
+   *
+   * @param dag DAG[Pipeline]
+   */
+  def createInstanceFor(dag: DAG[Pipeline], runDate: String): ActorRef = {
+
+    // Worker Actor factory method for use by a PipelineSupervisor. Creates RestApiActor instances with a PROD-based
+    // RestClient
+    val workerActorCreator = (context: ActorContext, job: Job) => {
+      context.actorOf(RestApiActor.props(context.self, ScalajRestClient), s"Worker-${job.id}-$runDate")
+    }
+
+    // PipelineSupervisor factory method for use by RunSupervisor. Names the created Actor after the Pipeline being executed
+    // for debugging purposes
+    val pipelineSupervisorCreator = (context: ActorContext, pipeline: Pipeline) => {
+      context.actorOf(PipelineSupervisor.props(context.self, pipeline, workerActorCreator), s"PipelineSupervisor-${pipeline.id}-$runDate")
+    }
+
+    // Create a single, named instance of the RunSupervisor
+    val runner = Akka.createRootActor(
+      Supervisor.props(pipelineSupervisorCreator, dag, runDate),
+      s"Runner-$runDate"
+    )
+
+    // Spin up the Reaper for the run
+    val reaper = Akka.createRootActor(Props(new ProdReaper), s"Reaper-$runDate")
+
+    // Have the Reaper watch the Runner for failure
+    reaper ! Watch(runner)
+
+    runner
+
   }
 
 }

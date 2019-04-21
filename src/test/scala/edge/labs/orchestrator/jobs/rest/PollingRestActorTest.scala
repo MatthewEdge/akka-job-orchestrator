@@ -6,7 +6,6 @@ import akka.actor.ActorRef
 import akka.testkit.TestProbe
 import edge.labs.orchestrator.jobs.Job
 import edge.labs.orchestrator.jobs.rest.PollingRestActor.{PollRequest, PollSuccess, PollTimeout}
-import edge.labs.orchestrator.rest.RestClient
 import edge.labs.orchestrator.{BaseActorTest, TestModels}
 
 import scala.concurrent.duration._

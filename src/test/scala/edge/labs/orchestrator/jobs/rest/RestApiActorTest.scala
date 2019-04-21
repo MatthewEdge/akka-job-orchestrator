@@ -4,7 +4,6 @@ import akka.actor.ActorRef
 import akka.testkit.TestProbe
 import edge.labs.orchestrator.jobs._
 import edge.labs.orchestrator.jobs.rest.PollingRestActor.PollTimeout
-import edge.labs.orchestrator.rest.RestClient
 import edge.labs.orchestrator.{BaseActorTest, TestModels}
 
 /**
