@@ -32,11 +32,11 @@ object Main extends App with JsonSupport {
   val repo = PersistentInMemEventRepository(
     (key: String, events: Set[Event]) => { /* no-op */ }
   )
-  val eventReader = createRootActor(EventReader.props(repo), "EventReader")
-  val eventWriter = createRootActor(Props(new LogFileEventWriter(repo)), "EventWriter")
+  val eventReader = system.actorOf(EventReader.props(repo), "EventReader")
+  val eventWriter = system.actorOf(Props(new LogFileEventWriter(repo)), "EventWriter")
 
   // Spin up the Reaper
-  val reaper = createRootActor(Props(new ProdReaper), "Reaper")
+  val reaper = system.actorOf(Props(new ProdReaper), "Reaper")
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //                            REST API
