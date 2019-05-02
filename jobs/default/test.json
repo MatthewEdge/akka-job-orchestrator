@@ -1,0 +1,39 @@
+{
+  "id": "TestPipelineA",
+  "version": "1",
+  "dependencies": [],
+
+  "baseUrl": "http://localhost",
+
+  "jobs": [
+    {
+      "id": "pipelineA-jobA",
+      "description": "Standard REST Test",
+      "dependencies": [],
+
+      "endpoint": "/A",
+      "method": "GET",
+      "queryParams": {
+        "foo": "bar"
+      }
+    },
+    {
+      "id": "pipelineA-jobB",
+      "description": "Polling REST Test",
+      "dependencies": [],
+
+      "endpoint": "/B",
+      "method": "GET",
+
+      "pollEndpoint": "/pollB",
+      "pollMethod": "GET",
+      "pollFor": {
+        "status": "Completed"
+      },
+
+      "pollFailure": {
+        "status": "Failed"
+      }
+    }
+  ]
+}
